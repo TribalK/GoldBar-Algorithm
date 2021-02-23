@@ -20,6 +20,11 @@ public class GoldBar {
 		}
 	}
 	
+	//Returns number of bars
+	public int getSize() {
+		return number_of_bars;
+	}
+	
 	//Check how many bars are still undetermined
 	public boolean identifyFakeBar() {
 		int numFake = 0;
@@ -33,21 +38,20 @@ public class GoldBar {
 	}
 	
 	//Checking sign of "Weighings" output for each number.
-	public String checkSign(int leftNums, WebElement test) {
+	public String checkSign(WebElement test) {
 		
-		if(test.getText().regionMatches(3+((leftNums*2)-1), "<", 0, 1))
+		if(test.getText().equals("<"))
 			return "LESS THAN!";
 		
-		else if(test.getText().regionMatches(3+((leftNums*2)-1), ">", 0, 1))
+		else if(test.getText().equals(">"))
 			return "GREATER THAN!";
 		
-		else if(test.getText().regionMatches(3+((leftNums*2)-1), "=", 0, 1))
+		else if(test.getText().equals("="))
 			return "EQUAL!";
 		
 		else
 			return "Nothing worked.";
 	}
-	
 	
 	
 	

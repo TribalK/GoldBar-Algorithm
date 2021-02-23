@@ -42,8 +42,8 @@ public class GoldBarTest {
 
 		try
 		{
-			int count = 1;
-			int leftNums = 5;	// Currently for testing purposes
+			//int count = 1;
+			int size = gold.getSize();
 			
 			//TODO: Place while loop to determine when we find the true fake gold bar
 			//Function is implemented in GoldBar.java but will not be set here until prepared
@@ -70,20 +70,41 @@ public class GoldBarTest {
 			driver.findElement(By.id("right_3")).sendKeys("3");
 			driver.findElement(By.id("weigh")).click();
 			
-			//Using xpath version of findElement to determine relative path for each new weighings.
 			//May switch to using data structure to hold each new entry
-			WebElement test = driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[5]/ol/li["+count+"]"));
+			WebElement test = driver.findElement(By.id("reset"));
 			
 			//Testing output
-			System.out.printf("%s %d%n",test.getText(),test.getText().length());
+			System.out.printf("The sign found is: %s %n",test.getText());
 			
 			//Check if sign is currently valid (will be used for determining which numbers to utilize next
-			System.out.println(gold.checkSign(leftNums, test));
+			System.out.println(gold.checkSign(test));
 			
 			//Click reset button to flush inputs
 			//Had difficulties initially setting the right find element technique due to the other reset ID
 			//found when Inspecting, it constantly conflicted
 			driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[4]/button[1]")).click();
+			
+			driver.findElement(By.id("left_0")).sendKeys("0");
+			driver.findElement(By.id("left_1")).sendKeys("1");
+			driver.findElement(By.id("right_0")).sendKeys("2");
+			driver.findElement(By.id("right_1")).sendKeys("3");
+			driver.findElement(By.id("weigh")).click();
+			
+			//Using xpath version of findElement to determine relative path for each new weighings.
+			//May switch to using data structure to hold each new entry
+			test = driver.findElement(By.id("reset"));
+			
+			//Testing output
+			System.out.printf("The sign found is: %s %n",test.getText());
+			
+			//Check if sign is currently valid (will be used for determining which numbers to utilize next
+			System.out.println(gold.checkSign(test));
+			
+			//Click reset button to flush inputs
+			//Had difficulties initially setting the right find element technique due to the other reset ID
+			//found when Inspecting, it constantly conflicted
+			driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[4]/button[1]")).click();
+			
 			
 			//Checking for reset button functionality without closing the webpage immediately
 			System.out.println("Enter any character to proceed.");
