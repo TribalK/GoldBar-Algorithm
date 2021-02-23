@@ -1,1 +1,0 @@
-# GoldBar-Minimum-Weighing-Algorithm
