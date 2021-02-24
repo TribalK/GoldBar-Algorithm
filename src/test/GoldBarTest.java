@@ -174,12 +174,12 @@ public class GoldBarTest {
 			input.next().charAt(0);
 			
 			System.out.println("The driver will be closing. Please wait a few moments for the process to complete.");
-			//Closes all windows of the new browser (vs. using driver.close())
+			//Closes all windows of the new browser and
 			//Exit out of driver object to prevent possible memory leaks
+			driver.close();
 			driver.quit();
 			
 			//The driver should be set to null as well, to prevent the ChromeDriver.exe process from stacking
-			driver = null;
 		
 			//Checking for exception related to WebDrive failing to connect
 		} catch (WebDriverException e) {
