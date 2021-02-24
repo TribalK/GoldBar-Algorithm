@@ -1,3 +1,23 @@
+/************************************************************************************
+ * Author: Derek Drackley
+ * Project: GoldBarTest.java
+ * 
+ * Description: Using a website (defined in baseURL variable) to simulate the least
+ * amount of weighings for nine gold bars, where one is fake.
+ * 
+ * Using Selenium to open the webpage and simulate inputs to produce outputs in the
+ * most efficent manner.
+ * 
+ * Ensure that the selenium server jar file is loaded into classpath
+ * Version ran for project: selenium-server-standalone-4.0.0-alpha-2.jar
+ * 
+ * Execution Method: Navigate to /src/test/ folders in location where you have
+ * files stored. Run "javac -d ../../ GoldBarTest.java GoldBar.java" in command line,
+ * then go back two parent directories and run "java test.GoldBarTest"
+ * so ChromeDriver.exe can be recognized from driver directory
+ *
+ ***********************************************************************************/
+
 package test;
 
 import org.openqa.selenium.WebElement;
