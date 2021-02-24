@@ -55,7 +55,7 @@ public class GoldBarTest {
 			//Initialized variables that will aid with WebDriver process
 			int real_bars = 0;
 			int number_of_bars = gold.getSize();
-			int count = 1;
+			int count = 0;
 
 			//Establish the System to be using the Chrome WebDriver for displaying the web page
 			System.setProperty("webdriver.chrome.driver", projectLocation+"\\driver\\chromedriver.exe");
@@ -74,6 +74,9 @@ public class GoldBarTest {
 			//The method in GoldBar.java returns false once one or fewer bars have been identified.
 			while(gold.identifyFakeBar())
 			{
+				//Increment count at the end of process
+				count++;
+				
 				//Take size of container based on total number of bars and 
 				int containerSize = (number_of_bars - real_bars)/3;
 				
@@ -149,12 +152,11 @@ public class GoldBarTest {
 				
 				//Resets visited boolean values of bars that were left unproven
 				gold.resetFakeVisited();
-				
-				//Increment count at the end of process
-				count++;
+			
 			}
 			
-			System.out.println("Yay! You find it!");
+			//Output counter
+			System.out.println("Yay! You find it in " + count + " runs!");
 			
 			System.out.println("All weighings:");
 			
