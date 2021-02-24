@@ -1,6 +1,6 @@
 /************************************************************************************
  * Author: Derek Drackley
- * Project: GoldBarTest.java
+ * Project: GoldBar.java
  * 
  * Description: Using a website (defined in baseURL variable) to simulate the least
  * amount of weighings for nine gold bars, where one is fake.
