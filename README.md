@@ -3,5 +3,13 @@
 Given nine gold bars in which all but one are of the same weight, the Minimum Weighing Algorithm will test the fewest number of times the 
 nine gold bars would need to be weighed in order to determine which one is fake.
 
+Given this information, the optimal algorithm is for only two weighings to be executed to find the fake gold bar.
+
 The project will be using Selenium to simulate the results through http://ec2-54-208-152-154.compute-1.amazonaws.com/. Java will be used as the
-primary programming language on Eclipse IDE.
+primary programming language on Eclipse IDE. Please ensure that you have a working Java Runtime Environment (using 1.8.0_281 during project).
+
+Ensure that you also have a selenium server jar file loaded into classpath-
+Version ran for project: selenium-server-standalone-4.0.0-alpha-2.jar
+
+Execution Method is as follows: 
+From the command line, you can navigate to the directory where you have downloaded the extracted files. Move to the src/test/ directory and run "javac -d ../../ GoldBarTest.java GoldBar.java" in command line to compile the files. The compilation will not work from just the current directory because it will not recognize ChromeDriver.exe from the driver directory. Go back two parent directories "cd ../../ " and run "java test.GoldBarTest" to execute the java application.
