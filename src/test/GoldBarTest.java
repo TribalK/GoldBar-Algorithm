@@ -77,7 +77,7 @@ public class GoldBarTest {
 				//Increment count at the end of process
 				count++;
 				
-				//Take size of container based on total number of bars and 
+				//Take size of container based on total number of bars and bars already counted as real
 				int containerSize = (number_of_bars - real_bars)/3;
 				
 				//Won't be an issue in our current setup, however was accounting for the possibility
@@ -114,7 +114,7 @@ public class GoldBarTest {
 					rightBowl.add(unvisitedNum);
 				}
 				
-				//Remaining items are 
+				//Remaining items
 				for(int i=containerSize*2; i<number_of_bars-real_bars; i++)
 				{
 					//find unvisited value
