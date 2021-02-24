@@ -1,6 +1,6 @@
 /************************************************************************************
  * Author: Derek Drackley
- * Project: GoldBarTest.java
+ * Project File: GoldBarTest.java
  * 
  * Description: Using a website (defined in baseURL variable) to simulate the least
  * amount of weighings for nine gold bars, where one is fake.
@@ -128,12 +128,17 @@ public class GoldBarTest {
 			
 			//Close all windows of the new browser (vs. using driver.close())
 			//Good to exit out of driver object to prevent possible memory leaks
+			
+			//The driver should be set to null as well, to prevent the ChromeDriver.exe process from stacking
 			driver.quit();
+			driver = null;
 		
 			//Checking for exception related to WebDrive failing to connect
 		} catch (WebDriverException e) {
 			System.out.println("Code: "+e.toString()+" Exception Message : "+e.getMessage());
 		}
+		
+		
 		input.close();
 	}
 
