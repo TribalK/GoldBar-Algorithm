@@ -5,8 +5,11 @@
  * Description: Using a website (defined in baseURL variable) to simulate the least
  * amount of weighings for nine gold bars, where one is fake.
  * 
- * Using Selenium to open the webpage and simulate inputs to produce outputs in the
- * most efficent manner.
+ * Given nine gold bars where only one consists of a fake weight, it should only
+ * take two tests at minimum to determine the correct fake weight.
+ * 
+ * Prject is using Selenium to open the webpage and simulate inputs to produce outputs
+ * in the most efficent manner. The ChromeDriver will be used for this example.
  * 
  * Ensure that the selenium server jar file is loaded into classpath
  * Version ran for project: selenium-server-standalone-4.0.0-alpha-2.jar
@@ -36,6 +39,7 @@ public class GoldBarTest {
 
 	public static void main(String[] args) {
 		
+		//Create WebDriver object
 		WebDriver driver;
 		Scanner input = new Scanner(System.in);
 		
@@ -60,53 +64,71 @@ public class GoldBarTest {
 			//The WebDriver object will navigate to that link in a new Chrome browser
 			driver.get(baseURL);
 			
+			//Loop will run until the fake bar of the group has been identified
+			//The method in GoldBar.java returns false once one or fewer bars have been identified.
 			while(gold.identifyFakeBar())
 			{
-			
+				//Take size of container based on total number of bars and 
 				int containerSize = (number_of_bars - real_bars)/3;
+				
+				//Won't be an issue in our current setup, however was accounting for the possibility
+				//of other number_of_bar values being used. If it were using an example such as 4 bars,
+				//it would risk the possibility of infinitely looping because there wouldn't be enough
+				//bars to fill in the first two ArrayLists.
+				if((containerSize == 0) && (number_of_bars-real_bars)%3 == 2)
+					containerSize = 1;
+					
+				//Creating three ArrayLists, one to hold the values for the two bowls and extra values.
 				ArrayList<Integer> leftBowl = new ArrayList<Integer>();
 				ArrayList<Integer> rightBowl = new ArrayList<Integer>();
 				ArrayList<Integer> extraBowl = new ArrayList<Integer>();
 				
+				//Filling leftBowl container up to containerSize
 				for(int i=0; i<containerSize; i++) {
+					//find unvisited value
 					int unvisitedNum = gold.insertFind();
 					
-					if(unvisitedNum != -1) {
-						driver.findElement(By.id("left_"+i)).sendKeys(Integer.toString(unvisitedNum));
-						leftBowl.add(unvisitedNum);
-					}
+					//Element is added based on the id noted by it's index and the first unvisited value
+					//Then the value is added to the bowl
+					driver.findElement(By.id("left_"+i)).sendKeys(Integer.toString(unvisitedNum));
+					leftBowl.add(unvisitedNum);
 				}
 				
+				//Filling rightBowl container up to containerSize
 				for(int i=0; i<containerSize; i++) {
+					//find unvisited value
 					int unvisitedNum = gold.insertFind();
 					
-					if(unvisitedNum != -1) {
-						driver.findElement(By.id("right_"+i)).sendKeys(Integer.toString(unvisitedNum));
-						rightBowl.add(unvisitedNum);
-					}
+					//Element is added based on the id noted by it's index and the first unvisited value
+					//Then the value is added to the bowl
+					driver.findElement(By.id("right_"+i)).sendKeys(Integer.toString(unvisitedNum));
+					rightBowl.add(unvisitedNum);
 				}
 				
-				for(int i=containerSize*2; i<number_of_bars; i++)
+				//Remaining items are 
+				for(int i=containerSize*2; i<number_of_bars-real_bars; i++)
 				{
+					//find unvisited value
 					int unvisitedNum = gold.insertFind();
 					
+					//Precaution since insertFind can return -1, however this shouldn't occur normally given our setup
+					//This shouldn't occur with the first two loops 
 					if(unvisitedNum != -1)
 						extraBowl.add(unvisitedNum);
-					
 				}
-				//Currently test examples to ensure numeric input and button functionality works successfully
 			
+				//Weigh button is clicked to query weighing list
 				driver.findElement(By.id("weigh")).click();
 			
 				//May switch to using data structure to hold each new entry
 				WebElement test = driver.findElement(By.id("reset"));
 				
-				//Testing output
-				System.out.printf("The sign found is: %s %n",test.getText());
-				
-				//Check if sign is currently valid (will be used for determining which numbers to utilize next
+				//The checkSign() method determines which values from the bowls have been proven to be real gold bars
+				//Returns an integer of converted bars from that run
 				int curr_real = gold.checkSign(test, leftBowl, rightBowl, extraBowl);
 				
+				//The number of real bars is accumulated into a total, this total is used for the next run
+				//if the identifyFakeBar method returns true
 				real_bars += curr_real;
 				
 				//Click reset button to flush inputs
@@ -114,30 +136,35 @@ public class GoldBarTest {
 				//found when Inspecting, it constantly conflicted
 				driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[4]/button[1]")).click();
 				
+				//Resets visited boolean values of bars that were left unproven
 				gold.resetFakeVisited();
 
 			}
 			
+			//Get index of only remaining fake gold bar
 			int fakeBarIndex = gold.revealFakeBar();
+			
 			//Click on box associated with the fake gold bar
 			driver.findElement(By.id("coin_"+fakeBarIndex)).click();
 			
-			//Checking for reset button functionality without closing the webpage immediately
-			System.out.println("Enter any character to proceed.");
+			System.out.printf("The fake bar is %d%n", fakeBarIndex);
+			
+			//Keeping the webpage open for the test engineer to examine the page before they decide to close it.
+			System.out.println("Enter any character to proceed, then press enter.");
 			input.next().charAt(0);
 			
-			//Close all windows of the new browser (vs. using driver.close())
-			//Good to exit out of driver object to prevent possible memory leaks
+			System.out.println("The driver will be closing. Please wait a few moments for the process to complete.");
+			//Closes all windows of the new browser (vs. using driver.close())
+			//Exit out of driver object to prevent possible memory leaks
+			driver.quit();
 			
 			//The driver should be set to null as well, to prevent the ChromeDriver.exe process from stacking
-			driver.quit();
 			driver = null;
 		
 			//Checking for exception related to WebDrive failing to connect
 		} catch (WebDriverException e) {
 			System.out.println("Code: "+e.toString()+" Exception Message : "+e.getMessage());
 		}
-		
 		
 		input.close();
 	}
