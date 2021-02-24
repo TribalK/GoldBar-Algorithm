@@ -33,6 +33,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 //Importing non-Selenium packages
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.List;
 
 //Driver class
 public class GoldBarTest {
@@ -51,8 +52,10 @@ public class GoldBarTest {
 
 		try
 		{
+			//Initialized variables that will aid with WebDriver process
 			int real_bars = 0;
 			int number_of_bars = gold.getSize();
+			int count = 1;
 
 			//Establish the System to be using the Chrome WebDriver for displaying the web page
 			System.setProperty("webdriver.chrome.driver", projectLocation+"\\driver\\chromedriver.exe");
@@ -63,6 +66,8 @@ public class GoldBarTest {
 			
 			//The WebDriver object will navigate to that link in a new Chrome browser
 			driver.get(baseURL);
+			
+			List<WebElement> elements = new ArrayList<WebElement>();
 			
 			//Loop will run until the fake bar of the group has been identified
 			//The method in GoldBar.java returns false once one or fewer bars have been identified.
@@ -119,6 +124,11 @@ public class GoldBarTest {
 			
 				//Weigh button is clicked to query weighing list
 				driver.findElement(By.id("weigh")).click();
+				
+				//Using count, add the next table's element to the elements list.
+				//(could not get it working with just grabbing the full ordered list xpath after the while loop),
+				//so I am using a counter variable to keep track of each new weigh entry
+				elements.add(driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[5]/ol/li["+count+"]")));
 			
 				//May switch to using data structure to hold each new entry
 				WebElement test = driver.findElement(By.id("reset"));
@@ -138,8 +148,18 @@ public class GoldBarTest {
 				
 				//Resets visited boolean values of bars that were left unproven
 				gold.resetFakeVisited();
-
+				
+				//Increment count at the end of process
+				count++;
 			}
+			
+			System.out.println("Yay! You find it!");
+			
+			System.out.println("All weighings:");
+			
+			//Display full list of weighings from page
+			for(WebElement weighings : elements)
+				System.out.println(weighings.getText());
 			
 			//Get index of only remaining fake gold bar
 			int fakeBarIndex = gold.revealFakeBar();
@@ -147,10 +167,10 @@ public class GoldBarTest {
 			//Click on box associated with the fake gold bar
 			driver.findElement(By.id("coin_"+fakeBarIndex)).click();
 			
-			System.out.printf("The fake bar is %d%n", fakeBarIndex);
+			System.out.printf("The fake bar is %d%n%n", fakeBarIndex);
 			
 			//Keeping the webpage open for the test engineer to examine the page before they decide to close it.
-			System.out.println("Enter any character to proceed, then press enter.");
+			System.out.println("Enter any character, then press enter to proceed.");
 			input.next().charAt(0);
 			
 			System.out.println("The driver will be closing. Please wait a few moments for the process to complete.");

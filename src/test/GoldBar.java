@@ -5,8 +5,11 @@
  * Description: Using a website (defined in baseURL variable) to simulate the least
  * amount of weighings for nine gold bars, where one is fake.
  * 
- * Using Selenium to open the webpage and simulate inputs to produce outputs in the
- * most efficent manner. The ChromeDriver will be used for this example.
+ * Given nine gold bars where only one consists of a fake weight, it should only
+ * take two tests at minimum to determine the correct fake weight.
+ * 
+ * Prject is using Selenium to open the webpage and simulate inputs to produce outputs
+ * in the most efficent manner. The ChromeDriver will be used for this example.
  * 
  * Ensure that the selenium server jar file is loaded into classpath
  * Version ran for project: selenium-server-standalone-4.0.0-alpha-2.jar
