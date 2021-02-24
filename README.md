@@ -9,6 +9,7 @@ The project will be using Selenium to simulate the results through http://ec2-54
 primary programming language on Eclipse IDE. Please ensure that you have a working Java Runtime Environment (using 1.8.0_281 during project).
 
 Ensure that you also have a selenium server jar file loaded into classpath. The version ran for project: selenium-server-standalone-4.0.0-alpha-2.jar
+The WebDriver used will be Google Chrome.
 
 Execution Method is as follows: 
 From the command line, you can navigate to the directory where you have downloaded the extracted files. Move to the src/test/ directory and run "javac -d ../../ GoldBarTest.java GoldBar.java" in command line to compile the files. The compilation will not work from just the current directory because it will not recognize ChromeDriver.exe from the driver directory. Go back two parent directories "cd ../../ " and run "java test.GoldBarTest" to execute the java application.
