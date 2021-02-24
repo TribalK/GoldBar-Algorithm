@@ -12,4 +12,5 @@ Ensure that you also have a selenium server jar file loaded into classpath. The 
 The WebDriver used will be Google Chrome.
 
 Execution Method is as follows: 
-From the command line, you can navigate to the directory where you have downloaded the extracted files. Move to the src/test/ directory and run "javac -d ../../ GoldBarTest.java GoldBar.java" in command line to compile the files. The compilation will not work from just the current directory because it will not recognize ChromeDriver.exe from the driver directory. Go back two parent directories "cd ../../ " and run "java test.GoldBarTest" to execute the java application.
+
+From the command line, you can navigate to the directory where you have downloaded the extracted zip file. Move to the src/test/ directory and run "javac -d ../../ GoldBarTest.java GoldBar.java" in command line to compile the files. The compilation will not work from just the current directory because it will not recognize ChromeDriver.exe from the driver directory. Go back two parent directories "cd ../../ " and run "java test.GoldBarTest" to execute the java application.
