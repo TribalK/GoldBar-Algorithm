@@ -1,6 +1,7 @@
 package test;
 
 import org.openqa.selenium.WebElement;
+import java.util.ArrayList;
 
 //GoldBar class - object-oriented class for determine validity of all gold bars
 public class GoldBar {
@@ -25,6 +26,17 @@ public class GoldBar {
 		return number_of_bars;
 	}
 	
+	public int insertFind() {
+		for(int j=0; j<number_of_bars; j++) {
+			if(!fakeBar[j] && !visited[j]) {
+				visited[j] = true;
+
+				return j;
+			}
+		}
+		return -1;
+	}
+	
 	//Check how many bars are still undetermined
 	public boolean identifyFakeBar() {
 		int numFake = 0;
@@ -34,24 +46,67 @@ public class GoldBar {
 				numFake++;
 		}
 		
-		return numFake >= 1;
+		return numFake > 1;
+	}
+	
+	public int revealFakeBar() {
+		for(int i=0; i<number_of_bars; i++)
+		{
+			if(!fakeBar[i])
+				return i;
+		}
+		
+		return -1;
 	}
 	
 	//Checking sign of "Weighings" output for each number.
-	public String checkSign(WebElement test) {
+	public int checkSign(WebElement test, ArrayList<Integer> leftBowl, ArrayList<Integer> rightBowl, ArrayList<Integer> extraBowl) {
 		
-		if(test.getText().equals("<"))
-			return "LESS THAN!";
+		int real_count = 0;
 		
-		else if(test.getText().equals(">"))
-			return "GREATER THAN!";
+		if(test.getText().equals("<")) {
+			setRealBars(rightBowl);
+			setRealBars(extraBowl);
+			real_count = rightBowl.size()+extraBowl.size();
+		}
+			
+		else if(test.getText().equals(">")) {
+			setRealBars(leftBowl);
+			setRealBars(extraBowl);
+			real_count = rightBowl.size()+extraBowl.size();
+		}
 		
-		else if(test.getText().equals("="))
-			return "EQUAL!";
+		else if(test.getText().equals("=")) {
+			setRealBars(leftBowl);
+			setRealBars(rightBowl);
+			real_count = rightBowl.size()+extraBowl.size();
+		}
 		
-		else
-			return "Nothing worked.";
+		else {
+			System.out.println("Nothing worked.");
+		}
+		
+		return real_count;
 	}
+	
+	public void setRealBars(ArrayList<Integer> bowl) {
+		for(int i=0; i<bowl.size(); i++)
+		{
+			int realBarVal = bowl.get(i);
+			
+			fakeBar[realBarVal] = true;
+		}
+	}
+
+	public void resetFakeVisited() {
+		for(int i=0; i<visited.length; i++)
+		{
+			if(!fakeBar[i])
+				visited[i] = false;
+		}
+	}
+	
+	
 	
 	
 	
