@@ -122,13 +122,13 @@ public class GoldBar {
 		else if(test.getText().equals(">")) {
 			setRealBars(leftBowl);
 			setRealBars(extraBowl);
-			real_count = rightBowl.size()+extraBowl.size();
+			real_count = leftBowl.size()+extraBowl.size();
 		}
 		
 		else if(test.getText().equals("=")) {
 			setRealBars(leftBowl);
 			setRealBars(rightBowl);
-			real_count = rightBowl.size()+extraBowl.size();
+			real_count = leftBowl.size()+rightBowl.size();
 		}
 		
 		//This is mainly for debug purposes, it should not normally come across this line during execution

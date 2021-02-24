@@ -67,6 +67,7 @@ public class GoldBarTest {
 			//The WebDriver object will navigate to that link in a new Chrome browser
 			driver.get(baseURL);
 			
+			//List that will grab all weighings after the weigh button is selected
 			List<WebElement> elements = new ArrayList<WebElement>();
 			
 			//Loop will run until the fake bar of the group has been identified
@@ -174,10 +175,12 @@ public class GoldBarTest {
 			input.next().charAt(0);
 			
 			System.out.println("The driver will be closing. Please wait a few moments for the process to complete.");
-			//Closes all windows of the new browser and
-			//Exit out of driver object to prevent possible memory leaks
-			driver.close();
+			//Closes all windows of the new browser (compared to driver.close(), might produce an error if closing
+			//Chrome prematurely before quit)
 			driver.quit();
+			
+			//Exit out of driver object to prevent possible memory leaks
+			driver = null;
 			
 			//The driver should be set to null as well, to prevent the ChromeDriver.exe process from stacking
 		
