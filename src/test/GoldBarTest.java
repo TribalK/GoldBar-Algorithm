@@ -87,34 +87,13 @@ public class GoldBarTest {
 				if((containerSize == 0) && (number_of_bars-real_bars)%3 == 2)
 					containerSize = 1;
 					
-				//Creating three ArrayLists, one to hold the values for the two bowls and extra values.
-				ArrayList<Integer> leftBowl = new ArrayList<Integer>();
-				ArrayList<Integer> rightBowl = new ArrayList<Integer>();
+				//Creating two ArrayLists, one to fill the left grid on the page, and one to fill the right grid.
+				ArrayList<Integer> leftBowl = fillBowl(gold, containerSize, driver, "left_");
+				ArrayList<Integer> rightBowl = fillBowl(gold, containerSize, driver, "right_");
+				
+				//Remaining items will be filled in an extra bowl
 				ArrayList<Integer> extraBowl = new ArrayList<Integer>();
 				
-				//Filling leftBowl container up to containerSize
-				for(int i=0; i<containerSize; i++) {
-					//find unvisited value
-					int unvisitedNum = gold.insertFind();
-					
-					//Element is added based on the id noted by it's index and the first unvisited value
-					//Then the value is added to the bowl
-					driver.findElement(By.id("left_"+i)).sendKeys(Integer.toString(unvisitedNum));
-					leftBowl.add(unvisitedNum);
-				}
-				
-				//Filling rightBowl container up to containerSize
-				for(int i=0; i<containerSize; i++) {
-					//find unvisited value
-					int unvisitedNum = gold.insertFind();
-					
-					//Element is added based on the id noted by it's index and the first unvisited value
-					//Then the value is added to the bowl
-					driver.findElement(By.id("right_"+i)).sendKeys(Integer.toString(unvisitedNum));
-					rightBowl.add(unvisitedNum);
-				}
-				
-				//Remaining items
 				for(int i=containerSize*2; i<number_of_bars-real_bars; i++)
 				{
 					//find unvisited value
@@ -194,4 +173,22 @@ public class GoldBarTest {
 		input.close();
 	}
 
+	//Taking away duplicating code for filling the left and right bowls
+	public static ArrayList<Integer> fillBowl(GoldBar gold, int containerSize, WebDriver driver, String bwlID) {
+		
+		ArrayList<Integer> bowl = new ArrayList<Integer>();
+		
+		for(int i=0; i<containerSize; i++) {
+			//find unvisited value
+			int unvisitedNum = gold.insertFind();
+			
+			//Element is added based on the id noted by it's index and the first unvisited value
+			//Then the value is added to the bowl
+			driver.findElement(By.id(bwlID+i)).sendKeys(Integer.toString(unvisitedNum));
+			bowl.add(unvisitedNum);
+		}
+		
+		//Returns the bowl filled with values to the list object in main
+		return bowl;
+	}
 }
