@@ -43,7 +43,7 @@ public class GoldBarTest {
 		
 		//Create WebDriver object
 		WebDriver driver;
-		Scanner input = new Scanner(System.in);
+
 		
 		//Get user's current directory (when tested by other engineer)
 		String projectLocation = System.getProperty("user.dir");
@@ -96,21 +96,7 @@ public class GoldBarTest {
 				//Creating two ArrayLists, one to fill the left grid on the page, and one to fill the right grid.
 				ArrayList<Integer> leftBowl = fillBowl(gold, containerSize, driver, "left_");
 				ArrayList<Integer> rightBowl = fillBowl(gold, containerSize, driver, "right_");
-				
-				//Remaining items will be filled in an extra bowl
-				ArrayList<Integer> extraBowl = new ArrayList<Integer>();
-				
-				//Remaining items
-				for(int i=containerSize*2; i<number_of_bars-real_bars; i++)
-				{
-					//find unvisited value
-					int unvisitedNum = gold.insertFind();
-					
-					//Precaution since insertFind can return -1, however this shouldn't occur normally given our setup
-					//This shouldn't occur with the first two loops 
-					if(unvisitedNum != -1)
-						extraBowl.add(unvisitedNum);
-				}
+				ArrayList<Integer> extraBowl = fillBowl(gold, containerSize, driver, "extra");
 			
 				//Weigh button is clicked to query weighing list
 				driver.findElement(By.id("weigh")).click();
@@ -144,11 +130,7 @@ public class GoldBarTest {
 			//Output counter
 			System.out.println("Yay! You find it in " + count + " runs!");
 			
-			System.out.println("All weighings:");
-			
-			//Display full list of weighings from page
-			for(WebElement weighings : elements)
-				System.out.println(weighings.getText());
+			displayWeighs(elements);
 			
 			//Get index of only remaining fake gold bar
 			int fakeBarIndex = gold.revealFakeBar();
@@ -157,27 +139,14 @@ public class GoldBarTest {
 			driver.findElement(By.id("coin_"+fakeBarIndex)).click();
 			
 			System.out.printf("The fake bar is %d%n%n", fakeBarIndex);
-			
-			//Keeping the webpage open for the test engineer to examine the page before they decide to close it.
-			System.out.println("Enter any character, then press enter to proceed.");
-			input.next().charAt(0);
-			
-			System.out.println("The driver will be closing. Please wait a few moments for the process to complete.");
-			//Closes all windows of the new browser (compared to driver.close(), might produce an error if closing
-			//Chrome prematurely before quit)
-			driver.quit();
-			
-			//Exit out of driver object to prevent possible memory leaks
-			driver = null;
-			
-			//The driver should be set to null as well, to prevent the ChromeDriver.exe process from stacking
+
+			closeDriver(driver);
 		
 			//Checking for exception related to WebDrive failing to connect
 		} catch (WebDriverException e) {
 			System.out.println("Code: "+e.toString()+" Exception Message : "+e.getMessage());
 		}
-		
-		input.close();
+	
 	}
 	
 	//Taking away duplicating code for filling the left and right bowls
@@ -191,12 +160,46 @@ public class GoldBarTest {
 				
 				//Element is added based on the id noted by it's index and the first unvisited value
 				//Then the value is added to the bowl
-				driver.findElement(By.id(bwlID+i)).sendKeys(Integer.toString(unvisitedNum));
+				
+				if(bwlID.startsWith("left") || bwlID.startsWith("right"))
+					driver.findElement(By.id(bwlID+i)).sendKeys(Integer.toString(unvisitedNum));
+				
 				bowl.add(unvisitedNum);
 			}
 			
 			//Returns the bowl filled with values to the list object in main
 			return bowl;
+		}
+		
+		public static void displayWeighs(List<WebElement> elements) {
+			
+			System.out.println("All weighings:");
+			
+			//Display full list of weighings from page
+			for(WebElement weighings : elements)
+				System.out.println(weighings.getText());
+		}
+		
+		//Close the WebDriver when prompted, otherwise the ChromeDriver's executable process will continue to run
+		public static void closeDriver(WebDriver driver) {
+			
+			Scanner input = new Scanner(System.in);
+			
+			//Keeping the webpage open for the test engineer to examine the page before they decide to close it.
+			System.out.println("Enter any character, then press enter to proceed.");
+			input.next().charAt(0);
+			
+			System.out.println("The driver will be closing. Please wait a few moments for the process to complete.");
+			
+			//Closes all windows of the new browser (compared to driver.close(), might produce an error if closing
+			//Chrome prematurely before quit)
+			driver.quit();
+			
+			//Exit out of driver object to prevent possible memory leaks
+			//The driver should be set to null as well, to prevent the ChromeDriver.exe process from stacking
+			driver = null;
+			
+			input.close();
 		}
 
 }
