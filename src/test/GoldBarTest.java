@@ -29,6 +29,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import java.util.concurrent.TimeUnit;
 
 //Importing non-Selenium packages
 import java.util.Scanner;
@@ -64,6 +65,11 @@ public class GoldBarTest {
 			//Get URL of assignment
 			String baseURL = "http://ec2-54-208-152-154.compute-1.amazonaws.com/";
 			
+			//"NoSuchTimeoutExceptions" had been recently noted during testing. I determined that it was timing out 
+			//the request to fetch the elements during the findElement procedure. I will use the implicit wait method
+			//to handle these timeouts.
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+			
 			//The WebDriver object will navigate to that link in a new Chrome browser
 			driver.get(baseURL);
 			
@@ -94,6 +100,7 @@ public class GoldBarTest {
 				//Remaining items will be filled in an extra bowl
 				ArrayList<Integer> extraBowl = new ArrayList<Integer>();
 				
+				//Remaining items
 				for(int i=containerSize*2; i<number_of_bars-real_bars; i++)
 				{
 					//find unvisited value
@@ -172,23 +179,24 @@ public class GoldBarTest {
 		
 		input.close();
 	}
-
+	
 	//Taking away duplicating code for filling the left and right bowls
-	public static ArrayList<Integer> fillBowl(GoldBar gold, int containerSize, WebDriver driver, String bwlID) {
-		
-		ArrayList<Integer> bowl = new ArrayList<Integer>();
-		
-		for(int i=0; i<containerSize; i++) {
-			//find unvisited value
-			int unvisitedNum = gold.insertFind();
+		public static ArrayList<Integer> fillBowl(GoldBar gold, int containerSize, WebDriver driver, String bwlID) {
 			
-			//Element is added based on the id noted by it's index and the first unvisited value
-			//Then the value is added to the bowl
-			driver.findElement(By.id(bwlID+i)).sendKeys(Integer.toString(unvisitedNum));
-			bowl.add(unvisitedNum);
+			ArrayList<Integer> bowl = new ArrayList<Integer>();
+			
+			for(int i=0; i<containerSize; i++) {
+				//find unvisited value
+				int unvisitedNum = gold.insertFind();
+				
+				//Element is added based on the id noted by it's index and the first unvisited value
+				//Then the value is added to the bowl
+				driver.findElement(By.id(bwlID+i)).sendKeys(Integer.toString(unvisitedNum));
+				bowl.add(unvisitedNum);
+			}
+			
+			//Returns the bowl filled with values to the list object in main
+			return bowl;
 		}
-		
-		//Returns the bowl filled with values to the list object in main
-		return bowl;
-	}
+
 }
