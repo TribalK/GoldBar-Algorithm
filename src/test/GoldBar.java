@@ -113,19 +113,19 @@ public class GoldBar {
 		//The following if-else statements compares WebElement as a string value against all possible outcomes
 		//The answer will determine which bowls hold the gold bars are confirmed to be real
 		
-		if(test.getText().equals("<")) {
+		if(test.getText().contains("<")) {
 			setRealBars(rightBowl);
 			setRealBars(extraBowl);
 			real_count = rightBowl.size()+extraBowl.size();
 		}
 			
-		else if(test.getText().equals(">")) {
+		else if(test.getText().contains(">")) {
 			setRealBars(leftBowl);
 			setRealBars(extraBowl);
 			real_count = leftBowl.size()+extraBowl.size();
 		}
 		
-		else if(test.getText().equals("=")) {
+		else if(test.getText().contains("=")) {
 			setRealBars(leftBowl);
 			setRealBars(rightBowl);
 			real_count = leftBowl.size()+rightBowl.size();
