@@ -44,7 +44,6 @@ public class GoldBarTest {
 		//Create WebDriver object
 		WebDriver driver;
 
-		
 		//Get user's current directory (when tested by other engineer)
 		String projectLocation = System.getProperty("user.dir");
 		
@@ -63,7 +62,8 @@ public class GoldBarTest {
 			driver = new ChromeDriver();
 			
 			//Get URL of assignment
-			String baseURL = "http://ec2-54-208-152-154.compute-1.amazonaws.com/";
+			String baseURL = "https://tribalk-goldbar-gridview.netlify.app/";
+			// String baseURL = "http://ec2-54-208-152-154.compute-1.amazonaws.com/";
 			
 			//"NoSuchTimeoutExceptions" had been recently noted during testing. I determined that it was timing out 
 			//the request to fetch the elements during the findElement procedure. I will use the implicit wait method
@@ -73,11 +73,13 @@ public class GoldBarTest {
 			//The WebDriver object will navigate to that link in a new Chrome browser
 			driver.get(baseURL);
 			
+			
 			//List that will grab all weighings after the weigh button is selected
 			List<WebElement> elements = new ArrayList<WebElement>();
 			
 			//Loop will run until the fake bar of the group has been identified
 			//The method in GoldBar.java returns false once one or fewer bars have been identified.
+			
 			while(gold.identifyFakeBar())
 			{
 				//Increment count at the end of process
@@ -85,13 +87,6 @@ public class GoldBarTest {
 				
 				//Take size of container based on total number of bars and bars already counted as real
 				int containerSize = (number_of_bars - real_bars)/3;
-				
-				//Won't be an issue in our current setup, however was accounting for the possibility
-				//of other number_of_bar values being used. If it were using an example such as 4 bars,
-				//it would risk the possibility of infinitely looping because there wouldn't be enough
-				//bars to fill in the first two ArrayLists.
-				if((containerSize == 0) && (number_of_bars-real_bars)%3 == 2)
-					containerSize = 1;
 					
 				//Creating two ArrayLists, one to fill the left grid on the page, and one to fill the right grid.
 				ArrayList<Integer> leftBowl = fillBowl(gold, containerSize, driver, "left_");
@@ -104,10 +99,13 @@ public class GoldBarTest {
 				//Using count, add the next table's element to the elements list.
 				//(could not get it working with just grabbing the full ordered list xpath after the while loop),
 				//so I am using a counter variable to keep track of each new weigh entry
-				elements.add(driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[5]/ol/li["+count+"]")));
+				 
+				elements.add(driver.findElement(By.xpath("//*[@id='resultList']/li["+count+"]")));
+			
+				// OLD -> elements.add(driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[5]/ol/li["+count+"]")));
 			
 				//May switch to using data structure to hold each new entry
-				WebElement test = driver.findElement(By.id("reset"));
+				WebElement test = driver.findElement(By.id("result"));
 				
 				//The checkSign() method determines which values from the bowls have been proven to be real gold bars
 				//Returns an integer of converted bars from that run
@@ -120,7 +118,9 @@ public class GoldBarTest {
 				//Click reset button to flush inputs
 				//Had difficulties initially setting the right find element technique due to the other reset ID
 				//found when Inspecting, it constantly conflicted
-				driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[4]/button[1]")).click();
+				
+				driver.findElement(By.id("reset")).click();
+				//OLD -> driver.findElement(By.xpath("//*[@id='root']/div/div[1]/div[4]/button[1]")).click();
 				
 				//Resets visited boolean values of bars that were left unproven
 				gold.resetFakeVisited();
@@ -128,7 +128,7 @@ public class GoldBarTest {
 			}
 			
 			//Output counter
-			System.out.println("Yay! You find it in " + count + " runs!");
+			System.out.println("Yay! You found it in " + count + " runs!");
 			
 			displayWeighs(elements);
 			
@@ -136,10 +136,10 @@ public class GoldBarTest {
 			int fakeBarIndex = gold.revealFakeBar();
 			
 			//Click on box associated with the fake gold bar
-			driver.findElement(By.id("coin_"+fakeBarIndex)).click();
+			driver.findElement(By.id("bar_"+fakeBarIndex)).click();
 			
 			System.out.printf("The fake bar is %d%n%n", fakeBarIndex);
-
+			
 			closeDriver(driver);
 		
 			//Checking for exception related to WebDrive failing to connect
