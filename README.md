@@ -5,7 +5,7 @@ nine gold bars would need to be weighed in order to determine which one is fake.
 
 Given this information, the optimal algorithm is for only two weighings to be executed to find the fake gold bar.
 
-The project will be using Selenium to simulate the results through http://ec2-54-208-152-154.compute-1.amazonaws.com/. Java will be used as the
+The project will be using Selenium to simulate the results through https://tribalk-goldbar-gridview.netlify.app/. Java will be used as the
 primary programming language on Eclipse IDE. Please ensure that you have a working Java Runtime Environment (using 1.8.0_281 during project).
 
 Ensure that you also have a selenium server jar file loaded into classpath. The version ran for project: selenium-server-standalone-4.0.0-alpha-2.jar
